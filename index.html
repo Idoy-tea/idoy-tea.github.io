@@ -1,13 +1,137 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Airdrop Crypto Notes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body.light {
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    body.dark {
+      background-color: #1e1e1e;
+      color: #f9f9f9;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      padding: 8px 12px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      background: #007bff;
+      color: white;
+    }
+
+    form, .filter-box {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+
+    form input, form select, .filter-box input, .filter-box select {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    form button {
+      padding: 8px 15px;
+      border: none;
+      background: #28a745;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+
+    .delete-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
 </head>
-<body>
-  <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>
+<body class="light">
+  <button class="theme-toggle" onclick="toggleTheme()">🌞/🌙</button>
+  <h1>Catatan Airdrop Crypto</h1>
+
+  <!-- Form Tambah Catatan -->
+  <form id="airdropForm">
+    <input type="date" id="tanggal" required>
+    <input type="text" id="jenis" placeholder="Jenis Airdrop" required>
+    <input type="url" id="link" placeholder="Link Airdrop" required>
+    <input type="text" id="properti" placeholder="Properti Digunakan" required>
+    <select id="status" required>
+      <option value="Pending">Pending</option>
+      <option value="Claimed">Claimed</option>
+      <option value="Expired">Expired</option>
+    </select>
+    <button type="submit">Tambah Catatan</button>
+  </form>
+
+  <!-- Filter Pencarian -->
+  <div class="filter-box">
+    <input type="text" id="searchJenis" placeholder="Cari berdasarkan jenis...">
+    <select id="filterStatus">
+      <option value="">Semua Status</option>
+      <option value="Pending">Pending</option>
+      <option value="Claimed">Claimed</option>
+      <option value="Expired">Expired</option>
+    </select>
+    <button onclick="applyFilter()">Filter</button>
+    <button onclick="resetFilter()">Reset</button>
+  </div>
+
+  <!-- Tabel Catatan -->
+  <table id="airdropTable">
+    <thead>
+      <tr>
+        <th>Tanggal</th>
+        <th>Jenis</th>
+        <th>Link</th>
+        <th>Properti</th>
+        <th>Status</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <!-- Panggil file JS eksternal -->
+  <script src="script.js"></script>
 </body>
 </html>
