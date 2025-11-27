@@ -4,134 +4,70 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Airdrop Crypto Notes</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    body.light {
-      background-color: #f9f9f9;
-      color: #333;
-    }
-
-    body.dark {
-      background-color: #1e1e1e;
-      color: #f9f9f9;
-    }
-
-    h1 {
-      text-align: center;
-    }
-
-    .theme-toggle {
-      position: fixed;
-      top: 15px;
-      right: 15px;
-      padding: 8px 12px;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-      background: #007bff;
-      color: white;
-    }
-
-    form, .filter-box {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
-      justify-content: center;
-    }
-
-    form input, form select, .filter-box input, .filter-box select {
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    form button {
-      padding: 8px 15px;
-      border: none;
-      background: #28a745;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    table, th, td {
-      border: 1px solid #ccc;
-    }
-
-    th, td {
-      padding: 10px;
-      text-align: center;
-    }
-
-    .delete-btn {
-      background: #dc3545;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-  </style>
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="light">
-  <button class="theme-toggle" onclick="toggleTheme()">🌞/🌙</button>
-  <h1>Catatan Airdrop Crypto</h1>
+<body class="bg-gray-100 text-gray-800 transition-colors duration-300 light">
+  <!-- Tombol Tema -->
+  <button class="fixed top-4 right-4 px-3 py-2 bg-blue-500 text-white rounded shadow" onclick="toggleTheme()">🌞/🌙</button>
 
-  <!-- Form Tambah Catatan -->
-  <form id="airdropForm">
-    <input type="date" id="tanggal" required>
-    <input type="text" id="jenis" placeholder="Jenis Airdrop" required>
-    <input type="url" id="link" placeholder="Link Airdrop" required>
-    <input type="text" id="properti" placeholder="Properti Digunakan" required>
-    <select id="status" required>
-      <option value="Pending">Pending</option>
-      <option value="Claimed">Claimed</option>
-      <option value="Expired">Expired</option>
-    </select>
-    <button type="submit">Tambah Catatan</button>
-  </form>
+  <h1 class="text-2xl font-bold text-center my-6">Catatan Airdrop Crypto</h1>
 
-  <!-- Filter Pencarian -->
-  <div class="filter-box">
-    <input type="text" id="searchJenis" placeholder="Cari berdasarkan jenis...">
-    <select id="filterStatus">
+  <!-- Filter -->
+  <div class="flex flex-wrap gap-2 justify-center mb-6">
+    <input type="text" id="searchJenis" placeholder="Cari jenis..." class="border rounded px-2 py-1">
+    <select id="filterStatus" class="border rounded px-2 py-1">
       <option value="">Semua Status</option>
       <option value="Pending">Pending</option>
       <option value="Claimed">Claimed</option>
       <option value="Expired">Expired</option>
     </select>
-    <button onclick="applyFilter()">Filter</button>
-    <button onclick="resetFilter()">Reset</button>
+    <button onclick="applyFilter()" class="bg-green-500 text-white px-3 py-1 rounded">Filter</button>
+    <button onclick="resetFilter()" class="bg-gray-400 text-white px-3 py-1 rounded">Reset</button>
   </div>
 
-  <!-- Tabel Catatan -->
-  <table id="airdropTable">
-    <thead>
-      <tr>
-        <th>Tanggal</th>
-        <th>Jenis</th>
-        <th>Link</th>
-        <th>Properti</th>
-        <th>Status</th>
-        <th>Aksi</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+  <!-- Tabel -->
+  <div class="overflow-x-auto">
+    <table class="min-w-full border border-gray-300">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="border px-3 py-2">Tanggal</th>
+          <th class="border px-3 py-2">Jenis</th>
+          <th class="border px-3 py-2">Link</th>
+          <th class="border px-3 py-2">Properti</th>
+          <th class="border px-3 py-2">Status</th>
+          <th class="border px-3 py-2">Aksi</th>
+        </tr>
+      </thead>
+      <tbody id="airdropTable" class="bg-white"></tbody>
+    </table>
+  </div>
 
-  <!-- Panggil file JS eksternal -->
+  <!-- Tombol "+" -->
+  <button class="fixed bottom-6 right-6 w-12 h-12 bg-green-500 text-white text-2xl rounded-full shadow-lg hover:bg-green-600 transition" onclick="openModal()">＋</button>
+
+  <!-- Modal -->
+  <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-opacity duration-300">
+    <div class="bg-white rounded-lg shadow-lg w-96 p-6 transform scale-95 opacity-0 transition-all duration-300" id="modalContent">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">Tambah Catatan Airdrop</h2>
+        <span class="cursor-pointer text-2xl" onclick="closeModal()">&times;</span>
+      </div>
+      <form id="airdropForm" class="flex flex-col gap-3">
+        <input type="date" id="tanggal" class="border rounded px-2 py-1" required>
+        <input type="text" id="jenis" placeholder="Jenis Airdrop" class="border rounded px-2 py-1" required>
+        <input type="url" id="link" placeholder="Link Airdrop" class="border rounded px-2 py-1" required>
+        <input type="text" id="properti" placeholder="Properti Digunakan" class="border rounded px-2 py-1" required>
+        <select id="status" class="border rounded px-2 py-1" required>
+          <option value="Pending">Pending</option>
+          <option value="Claimed">Claimed</option>
+          <option value="Expired">Expired</option>
+        </select>
+        <button type="submit" class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600 transition">Simpan</button>
+      </form>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
