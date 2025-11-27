@@ -1,6 +1,5 @@
 const form = document.getElementById('airdropForm');
 const tableBody = document.querySelector('#airdropTable');
-const body = document.body;
 const modal = document.getElementById('modal');
 const modalContent = document.getElementById('modalContent');
 
@@ -32,7 +31,7 @@ function addRow(data) {
   row.innerHTML = `
     <td class="border px-3 py-2">${data.tanggal}</td>
     <td class="border px-3 py-2">${data.jenis}</td>
-    <td class="border px-3 py-2"><a href="${data.link}" target="_blank" class="text-blue-600 underline">${data.link}</a></td>
+    <td class="border px-3 py-2"><a href="${data.link}" target="_blank" class="text-blue-600 dark:text-blue-400 underline">${data.link}</a></td>
     <td class="border px-3 py-2">${data.properti}</td>
     <td class="border px-3 py-2">${data.status}</td>
     <td class="border px-3 py-2"><button class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Hapus</button></td>
@@ -62,16 +61,9 @@ function saveData() {
   localStorage.setItem('airdropData', JSON.stringify(data));
 }
 
+// Toggle tema
 function toggleTheme() {
-  body.classList.toggle('light');
-  body.classList.toggle('dark');
-  if (body.classList.contains('dark')) {
-    body.classList.replace('bg-gray-100', 'bg-gray-900');
-    body.classList.replace('text-gray-800', 'text-gray-100');
-  } else {
-    body.classList.replace('bg-gray-900', 'bg-gray-100');
-    body.classList.replace('text-gray-100', 'text-gray-800');
-  }
+  document.body.classList.toggle('dark');
 }
 
 // Modal control dengan animasi
