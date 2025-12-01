@@ -150,6 +150,25 @@ function closeModal() {
   }, 200);
 }
 
+const myPassword = "Bunga&bintanG"; 
+
+function checkAuth() {
+  const input = prompt("Masukkan password untuk edit data:");
+  return input === myPassword;
+}
+
+// Contoh penggunaan di tombol tambah
+function openModal() {
+  if (!checkAuth()) {
+    alert("Password salah, tidak bisa edit!");
+    return;
+  }
+  modal.classList.remove('hidden');
+  setTimeout(() => {
+    modalContent.classList.remove('opacity-0', 'scale-95');
+    modalContent.classList.add('opacity-100', 'scale-100');
+  }, 50);
+}
 // Filter data
 function applyFilter() {
   const jenisFilter = document.getElementById('searchJenis').value.toLowerCase();
