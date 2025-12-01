@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Airdrop Crypto Notes</title>
-  <!-- Aktifkan dark mode berbasis class -->
   <script>
     tailwind.config = {
       darkMode: 'class'
@@ -31,11 +30,12 @@
     <button onclick="resetFilter()" class="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500">Reset</button>
   </div>
 
-  <!-- Tabel tanpa garis -->
+  <!-- Tabel -->
   <div class="overflow-x-auto">
     <table class="min-w-full">
       <thead class="bg-gray-200 dark:bg-gray-700">
         <tr>
+          <th class="px-3 py-2 text-left">Nama Airdrop</th>
           <th class="px-3 py-2 text-left">Tanggal</th>
           <th class="px-3 py-2 text-left">Jenis</th>
           <th class="px-3 py-2 text-left">Link</th>
@@ -60,9 +60,9 @@
         <span class="cursor-pointer text-2xl" onclick="closeModal()">&times;</span>
       </div>
       <form id="airdropForm" class="flex flex-col gap-3">
+        <input type="text" id="nama" placeholder="Nama Airdrop" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
         <input type="date" id="tanggal" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
 
-        <!-- Jenis jadi pilihan -->
         <select id="jenis" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
           <option value="Tesnet">Tesnet</option>
           <option value="Gatcha">Gatcha</option>
@@ -72,8 +72,6 @@
 
         <input type="url" id="link" placeholder="Link Airdrop" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
         <input type="text" id="properti" placeholder="Properti Digunakan" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
-
-        <!-- Kolom Wallet -->
         <input type="text" id="wallet" placeholder="Wallet yang digunakan" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
 
         <select id="status" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
