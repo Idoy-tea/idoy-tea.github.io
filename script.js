@@ -3,6 +3,8 @@ const tableBody = document.querySelector('#airdropTable');
 const modal = document.getElementById('modal');
 const modalContent = document.getElementById('modalContent');
 
+const statusOptions = ["Pending", "Claimed", "Expired"];
+
 // Load data dari localStorage
 window.onload = function() {
   const savedData = JSON.parse(localStorage.getItem('airdropData')) || [];
@@ -17,6 +19,7 @@ form.addEventListener('submit', function(e) {
     jenis: document.getElementById('jenis').value,
     link: document.getElementById('link').value,
     properti: document.getElementById('properti').value,
+    wallet: document.getElementById('wallet').value,
     status: document.getElementById('status').value
   };
 
@@ -28,17 +31,41 @@ form.addEventListener('submit', function(e) {
 
 function addRow(data) {
   const row = document.createElement('tr');
+  row.className = "hover:bg-gray-100 dark:hover:bg-gray-700";
   row.innerHTML = `
-    <td class="border px-3 py-2">${data.tanggal}</td>
-    <td class="border px-3 py-2">${data.jenis}</td>
-    <td class="border px-3 py-2"><a href="${data.link}" target="_blank" class="text-blue-600 dark:text-blue-400 underline">${data.link}</a></td>
-    <td class="border px-3 py-2">${data.properti}</td>
-    <td class="border px-3 py-2">${data.status}</td>
-    <td class="border px-3 py-2"><button class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Hapus</button></td>
+    <td class="px-3 py-2">${data.tanggal}</td>
+    <td class="px-3 py-2">${data.jenis}</td>
+    <td class="px-3 py-2">
+      <a href="${data.link}" target="_blank" class="inline-block text-blue-600 dark:text-blue-400 hover:scale-110 transition">
+        <!-- Heroicon: External Link -->
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+             stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M13.5 4.5H19.5M19.5 4.5V10.5M19.5 4.5L9 15M4.5 19.5H9.75C10.9926 19.5 12 18.4926 12 17.25V12.75C12 11.5074 10.9926 10.5 9.75 10.5H4.5V19.5Z" />
+        </svg>
+      </a>
+    </td>
+    <td class="px-3 py-2">${data.properti}</td>
+    <td class="px-3 py-2">${data.wallet}</td>
+    <td class="px-3 py-2 status-cell cursor-pointer">${data.status}</td>
+    <td class="px-3 py-2">
+      <button class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Hapus</button>
+    </td>
   `;
 
+  // Hapus baris
   row.querySelector('button').addEventListener('click', function() {
     row.remove();
+    saveData();
+  });
+
+  // Toggle status dengan klik
+  const statusCell = row.querySelector('.status-cell');
+  statusCell.addEventListener('click', function() {
+    let current = statusCell.textContent;
+    let idx = statusOptions.indexOf(current);
+    let next = statusOptions[(idx + 1) % statusOptions.length];
+    statusCell.textContent = next;
     saveData();
   });
 
@@ -55,7 +82,8 @@ function saveData() {
       jenis: cells[1].textContent,
       link: cells[2].querySelector('a').href,
       properti: cells[3].textContent,
-      status: cells[4].textContent
+      wallet: cells[4].textContent,
+      status: cells[5].textContent
     });
   });
   localStorage.setItem('airdropData', JSON.stringify(data));
@@ -80,27 +108,27 @@ function closeModal() {
   modalContent.classList.add('opacity-0', 'scale-95');
   setTimeout(() => {
     modal.classList.add('hidden');
-  }, 300);
+  }, 200);
 }
 
-// Filter
+// Filter data
 function applyFilter() {
-  const searchJenis = document.getElementById('searchJenis').value.toLowerCase();
-  const filterStatus = document.getElementById('filterStatus').value;
+  const jenisFilter = document.getElementById('searchJenis').value.toLowerCase();
+  const statusFilter = document.getElementById('filterStatus').value;
 
   const rows = tableBody.querySelectorAll('tr');
   rows.forEach(row => {
     const jenis = row.cells[1].textContent.toLowerCase();
-    const status = row.cells[4].textContent;
-    const matchJenis = jenis.includes(searchJenis);
-    const matchStatus = filterStatus === "" || status === filterStatus;
-    row.style.display = (matchJenis && matchStatus) ? "" : "none";
+    const status = row.cells[5].textContent;
+    const matchJenis = !jenisFilter || jenis.includes(jenisFilter);
+    const matchStatus = !statusFilter || status === statusFilter;
+    row.style.display = (matchJenis && matchStatus) ? '' : 'none';
   });
 }
 
 function resetFilter() {
-  document.getElementById('searchJenis').value = "";
-  document.getElementById('filterStatus').value = "";
+  document.getElementById('searchJenis').value = '';
+  document.getElementById('filterStatus').value = '';
   const rows = tableBody.querySelectorAll('tr');
-  rows.forEach(row => row.style.display = "");
+  rows.forEach(row => row.style.display = '');
 }
