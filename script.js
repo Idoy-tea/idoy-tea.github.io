@@ -15,6 +15,7 @@ form.addEventListener('submit', function(e) {
   e.preventDefault();
 
   const data = {
+    nama: document.getElementById('nama').value,
     tanggal: document.getElementById('tanggal').value,
     jenis: document.getElementById('jenis').value,
     link: document.getElementById('link').value,
@@ -33,6 +34,7 @@ function addRow(data) {
   const row = document.createElement('tr');
   row.className = "hover:bg-gray-100 dark:hover:bg-gray-700";
   row.innerHTML = `
+    <td class="px-3 py-2">${data.nama}</td>
     <td class="px-3 py-2">${data.tanggal}</td>
     <td class="px-3 py-2">${data.jenis}</td>
     <td class="px-3 py-2">
@@ -59,7 +61,6 @@ function addRow(data) {
     saveData();
   });
 
-  // Toggle status dengan klik
   const statusCell = row.querySelector('.status-cell');
   statusCell.addEventListener('click', function() {
     let current = statusCell.textContent;
@@ -78,12 +79,13 @@ function saveData() {
   rows.forEach(row => {
     const cells = row.querySelectorAll('td');
     data.push({
-      tanggal: cells[0].textContent,
-      jenis: cells[1].textContent,
-      link: cells[2].querySelector('a').href,
-      properti: cells[3].textContent,
-      wallet: cells[4].textContent,
-      status: cells[5].textContent
+      nama: cells[0].textContent,
+      tanggal: cells[1].textContent,
+      jenis: cells[2].textContent,
+      link: cells[3].querySelector('a').href,
+      properti: cells[4].textContent,
+      wallet: cells[5].textContent,
+      status: cells[6].textContent
     });
   });
   localStorage.setItem('airdropData', JSON.stringify(data));
@@ -118,8 +120,8 @@ function applyFilter() {
 
   const rows = tableBody.querySelectorAll('tr');
   rows.forEach(row => {
-    const jenis = row.cells[1].textContent.toLowerCase();
-    const status = row.cells[5].textContent;
+    const jenis = row.cells[2].textContent.toLowerCase();
+    const status = row.cells[6].textContent;
     const matchJenis = !jenisFilter || jenis.includes(jenisFilter);
     const matchStatus = !statusFilter || status === statusFilter;
     row.style.display = (matchJenis && matchStatus) ? '' : 'none';
