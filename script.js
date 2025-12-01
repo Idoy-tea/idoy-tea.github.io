@@ -4,6 +4,7 @@ const modal = document.getElementById('modal');
 const modalContent = document.getElementById('modalContent');
 
 const statusOptions = ["Pending", "Claimed", "Expired"];
+let editingRow = null; // untuk mode edit
 
 // Load data dari localStorage
 window.onload = function() {
@@ -23,6 +24,12 @@ form.addEventListener('submit', function(e) {
     wallet: document.getElementById('wallet').value,
     status: document.getElementById('status').value
   };
+
+  if (editingRow) {
+    // update baris lama
+    editingRow.remove();
+    editingRow = null;
+  }
 
   addRow(data);
   saveData();
@@ -50,17 +57,47 @@ function addRow(data) {
     <td class="px-3 py-2">${data.properti}</td>
     <td class="px-3 py-2">${data.wallet}</td>
     <td class="px-3 py-2 status-cell cursor-pointer">${data.status}</td>
-    <td class="px-3 py-2">
-      <button class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Hapus</button>
+    <td class="px-3 py-2 flex gap-2">
+      <!-- Tombol Edit -->
+      <button class="edit-btn text-yellow-500 hover:scale-110 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+             stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M16.862 4.487l2.651 2.651m-2.651-2.651a2.25 2.25 0 00-3.182 0l-9.193 9.193a4.5 4.5 0 00-1.318 2.25l-.318 2.25a.75.75 0 00.854.854l2.25-.318a4.5 4.5 0 002.25-1.318l9.193-9.193a2.25 2.25 0 000-3.182z" />
+        </svg>
+      </button>
+      <!-- Tombol Hapus -->
+      <button class="delete-btn text-red-500 hover:scale-110 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+             stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
     </td>
   `;
 
   // Hapus baris
-  row.querySelector('button').addEventListener('click', function() {
+  row.querySelector('.delete-btn').addEventListener('click', function() {
     row.remove();
     saveData();
   });
 
+  // Edit baris
+  row.querySelector('.edit-btn').addEventListener('click', function() {
+    document.getElementById('nama').value = data.nama;
+    document.getElementById('tanggal').value = data.tanggal;
+    document.getElementById('jenis').value = data.jenis;
+    document.getElementById('link').value = data.link;
+    document.getElementById('properti').value = data.properti;
+    document.getElementById('wallet').value = data.wallet;
+    document.getElementById('status').value = data.status;
+
+    editingRow = row; // simpan referensi baris yang sedang diedit
+    openModal();
+  });
+
+  // Toggle status dengan klik
   const statusCell = row.querySelector('.status-cell');
   statusCell.addEventListener('click', function() {
     let current = statusCell.textContent;
