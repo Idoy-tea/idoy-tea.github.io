@@ -10,7 +10,6 @@
       darkMode: 'class'
     }
   </script>
-  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-white transition-colors duration-300">
@@ -32,17 +31,18 @@
     <button onclick="resetFilter()" class="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500">Reset</button>
   </div>
 
-  <!-- Tabel -->
+  <!-- Tabel tanpa garis -->
   <div class="overflow-x-auto">
-    <table class="min-w-full border border-gray-300 dark:border-gray-700">
+    <table class="min-w-full">
       <thead class="bg-gray-200 dark:bg-gray-700">
         <tr>
-          <th class="border px-3 py-2">Tanggal</th>
-          <th class="border px-3 py-2">Jenis</th>
-          <th class="border px-3 py-2">Link</th>
-          <th class="border px-3 py-2">Properti</th>
-          <th class="border px-3 py-2">Status</th>
-          <th class="border px-3 py-2">Aksi</th>
+          <th class="px-3 py-2 text-left">Tanggal</th>
+          <th class="px-3 py-2 text-left">Jenis</th>
+          <th class="px-3 py-2 text-left">Link</th>
+          <th class="px-3 py-2 text-left">Properti</th>
+          <th class="px-3 py-2 text-left">Wallet</th>
+          <th class="px-3 py-2 text-left">Status</th>
+          <th class="px-3 py-2 text-left">Aksi</th>
         </tr>
       </thead>
       <tbody id="airdropTable" class="bg-white dark:bg-gray-800"></tbody>
@@ -61,14 +61,27 @@
       </div>
       <form id="airdropForm" class="flex flex-col gap-3">
         <input type="date" id="tanggal" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
-        <input type="text" id="jenis" placeholder="Jenis Airdrop" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
+
+        <!-- Jenis jadi pilihan -->
+        <select id="jenis" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
+          <option value="Tesnet">Tesnet</option>
+          <option value="Gatcha">Gatcha</option>
+          <option value="Dropter">Dropter</option>
+          <option value="Whaitlist">Whaitlist</option>
+        </select>
+
         <input type="url" id="link" placeholder="Link Airdrop" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
         <input type="text" id="properti" placeholder="Properti Digunakan" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
+
+        <!-- Kolom Wallet -->
+        <input type="text" id="wallet" placeholder="Wallet yang digunakan" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
+
         <select id="status" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
           <option value="Pending">Pending</option>
           <option value="Claimed">Claimed</option>
           <option value="Expired">Expired</option>
         </select>
+
         <button type="submit" class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600 transition">Simpan</button>
       </form>
     </div>
