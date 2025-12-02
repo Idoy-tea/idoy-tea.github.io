@@ -4,29 +4,36 @@ const modal = document.getElementById('modal');
 const modalContent = document.getElementById('modalContent');
 
 const statusOptions = ["Pending", "Claimed", "Expired"];
-let editingRow = null; // untuk mode edit
+let editingRow = null;
 
-// Load data dari localStorage
+// Load data dari localStorage saat halaman dibuka
 window.onload = function() {
   const savedData = JSON.parse(localStorage.getItem('airdropData')) || [];
   savedData.forEach(item => addRow(item));
 };
 
+// Submit form
 form.addEventListener('submit', function(e) {
   e.preventDefault();
+
+  // Ambil semua checkbox properti
+  const checkboxes = document.querySelectorAll('#properti input[type="checkbox"]');
+  const selectedProps = [];
+  checkboxes.forEach(cb => {
+    if (cb.checked) selectedProps.push(cb.value);
+  });
 
   const data = {
     nama: document.getElementById('nama').value,
     tanggal: document.getElementById('tanggal').value,
     jenis: document.getElementById('jenis').value,
     link: document.getElementById('link').value,
-    properti: document.getElementById('properti').value,
+    properti: selectedProps.join(', '),
     wallet: document.getElementById('wallet').value,
     status: document.getElementById('status').value
   };
 
   if (editingRow) {
-    // update baris lama
     editingRow.remove();
     editingRow = null;
   }
@@ -37,6 +44,7 @@ form.addEventListener('submit', function(e) {
   closeModal();
 });
 
+// Tambah baris ke tabel
 function addRow(data) {
   const row = document.createElement('tr');
   row.className = "hover:bg-gray-100 dark:hover:bg-gray-700";
@@ -46,7 +54,6 @@ function addRow(data) {
     <td class="px-3 py-2">${data.jenis}</td>
     <td class="px-3 py-2">
       <a href="${data.link}" target="_blank" class="inline-block text-blue-600 dark:text-blue-400 hover:scale-110 transition">
-        <!-- Heroicon: External Link -->
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
              stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
           <path stroke-linecap="round" stroke-linejoin="round"
@@ -89,11 +96,17 @@ function addRow(data) {
     document.getElementById('tanggal').value = data.tanggal;
     document.getElementById('jenis').value = data.jenis;
     document.getElementById('link').value = data.link;
-    document.getElementById('properti').value = data.properti;
+
+    // Reset semua checkbox dulu
+    const checkboxes = document.querySelectorAll('#properti input[type="checkbox"]');
+    checkboxes.forEach(cb => {
+      cb.checked = data.properti.includes(cb.value);
+    });
+
     document.getElementById('wallet').value = data.wallet;
     document.getElementById('status').value = data.status;
 
-    editingRow = row; // simpan referensi baris yang sedang diedit
+    editingRow = row;
     openModal();
   });
 
@@ -110,6 +123,7 @@ function addRow(data) {
   tableBody.appendChild(row);
 }
 
+// Simpan data ke localStorage
 function saveData() {
   const rows = tableBody.querySelectorAll('tr');
   const data = [];
@@ -150,25 +164,6 @@ function closeModal() {
   }, 200);
 }
 
-const myPassword = "Bunga&bintanG"; 
-
-function checkAuth() {
-  const input = prompt("Masukkan password untuk edit data:");
-  return input === myPassword;
-}
-
-// Contoh penggunaan di tombol tambah
-function openModal() {
-  if (!checkAuth()) {
-    alert("Password salah, tidak bisa edit!");
-    return;
-  }
-  modal.classList.remove('hidden');
-  setTimeout(() => {
-    modalContent.classList.remove('opacity-0', 'scale-95');
-    modalContent.classList.add('opacity-100', 'scale-100');
-  }, 50);
-}
 // Filter data
 function applyFilter() {
   const jenisFilter = document.getElementById('searchJenis').value.toLowerCase();
