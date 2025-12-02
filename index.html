@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Airdrop Crypto Notes</title>
   <script>
-    tailwind.config = {
-      darkMode: 'class'
-    }
+    tailwind.config = { darkMode: 'class' }
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -63,6 +61,7 @@
         <input type="text" id="nama" placeholder="Nama Airdrop" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
         <input type="date" id="tanggal" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
 
+        <!-- Jenis -->
         <select id="jenis" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
           <option value="Tesnet">Tesnet</option>
           <option value="Gatcha">Gatcha</option>
@@ -71,7 +70,15 @@
         </select>
 
         <input type="url" id="link" placeholder="Link Airdrop" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
-        <input type="text" id="properti" placeholder="Properti Digunakan" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
+
+        <!-- Properti multi-select -->
+        <div id="properti" class="flex flex-col gap-2 border rounded px-2 py-2 dark:bg-gray-700 dark:border-gray-600">
+          <label><input type="checkbox" value="Email"> Email</label>
+          <label><input type="checkbox" value="Twitter"> Twitter</label>
+          <label><input type="checkbox" value="Discord"> Discord</label>
+          <label><input type="checkbox" value="Telegram"> Telegram</label>
+        </div>
+
         <input type="text" id="wallet" placeholder="Wallet yang digunakan" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
 
         <select id="status" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
