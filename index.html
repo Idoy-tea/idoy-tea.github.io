@@ -4,28 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Airdrop Crypto Notes</title>
-  <script>
-    tailwind.config = { darkMode: 'class' }
-  </script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- SheetJS untuk export Excel -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 </head>
 <body class="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-white transition-colors duration-300">
-  <!-- Tombol Tema -->
-  <button class="fixed top-4 right-4 px-3 py-2 bg-blue-500 text-white rounded shadow" onclick="toggleTheme()">🌞/🌙</button>
 
   <h1 class="text-2xl font-bold text-center my-6">Catatan Airdrop Crypto</h1>
 
-  <!-- Filter -->
-  <div class="flex flex-wrap gap-2 justify-center mb-6">
-    <input type="text" id="searchJenis" placeholder="Cari jenis..." class="border rounded px-2 py-1 dark:bg-gray-800 dark:border-gray-600">
-    <select id="filterStatus" class="border rounded px-2 py-1 dark:bg-gray-800 dark:border-gray-600">
-      <option value="">Semua Status</option>
-      <option value="Pending">Pending</option>
-      <option value="Claimed">Claimed</option>
-      <option value="Expired">Expired</option>
-    </select>
-    <button onclick="applyFilter()" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Filter</button>
-    <button onclick="resetFilter()" class="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500">Reset</button>
+  <!-- Tombol Export -->
+  <div class="flex gap-2 justify-center mb-4">
+    <button onclick="exportJSON()" class="bg-purple-500 text-white px-3 py-1 rounded hover:bg-purple-600">Export JSON</button>
+    <button onclick="exportExcel()" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Export Excel</button>
   </div>
 
   <!-- Tabel -->
@@ -61,7 +51,6 @@
         <input type="text" id="nama" placeholder="Nama Airdrop" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
         <input type="date" id="tanggal" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
 
-        <!-- Jenis -->
         <select id="jenis" class="border rounded px-2 py-1 dark:bg-gray-700 dark:border-gray-600" required>
           <option value="Tesnet">Tesnet</option>
           <option value="Gatcha">Gatcha</option>
@@ -92,6 +81,6 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>
