@@ -52,35 +52,13 @@ function addRow(data) {
     <td class="px-3 py-2">${data.nama}</td>
     <td class="px-3 py-2">${data.tanggal}</td>
     <td class="px-3 py-2">${data.jenis}</td>
-    <td class="px-3 py-2">
-      <a href="${data.link}" target="_blank" class="inline-block text-blue-600 dark:text-blue-400 hover:scale-110 transition">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-             stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M13.5 4.5H19.5M19.5 4.5V10.5M19.5 4.5L9 15M4.5 19.5H9.75C10.9926 19.5 12 18.4926 12 17.25V12.75C12 11.5074 10.9926 10.5 9.75 10.5H4.5V19.5Z" />
-        </svg>
-      </a>
-    </td>
+    <td class="px-3 py-2"><a href="${data.link}" target="_blank" class="text-blue-600 dark:text-blue-400">🔗</a></td>
     <td class="px-3 py-2">${data.properti}</td>
     <td class="px-3 py-2">${data.wallet}</td>
     <td class="px-3 py-2 status-cell cursor-pointer">${data.status}</td>
-    <td class="px-3 py-2 flex gap-2">
-      <!-- Tombol Edit -->
-      <button class="edit-btn text-yellow-500 hover:scale-110 transition">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-             stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M16.862 4.487l2.651 2.651m-2.651-2.651a2.25 2.25 0 00-3.182 0l-9.193 9.193a4.5 4.5 0 00-1.318 2.25l-.318 2.25a.75.75 0 00.854.854l2.25-.318a4.5 4.5 0 002.25-1.318l9.193-9.193a2.25 2.25 0 000-3.182z" />
-        </svg>
-      </button>
-      <!-- Tombol Hapus -->
-      <button class="delete-btn text-red-500 hover:scale-110 transition">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-             stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
+    <td class="px-3 py-2">
+      <button class="edit-btn text-yellow-500">✏️</button>
+      <button class="delete-btn text-red-500">🗑️</button>
     </td>
   `;
 
@@ -142,12 +120,7 @@ function saveData() {
   localStorage.setItem('airdropData', JSON.stringify(data));
 }
 
-// Toggle tema
-function toggleTheme() {
-  document.body.classList.toggle('dark');
-}
-
-// Modal control dengan animasi
+// Modal control
 function openModal() {
   modal.classList.remove('hidden');
   setTimeout(() => {
@@ -164,24 +137,23 @@ function closeModal() {
   }, 200);
 }
 
-// Filter data
-function applyFilter() {
-  const jenisFilter = document.getElementById('searchJenis').value.toLowerCase();
-  const statusFilter = document.getElementById('filterStatus').value;
-
-  const rows = tableBody.querySelectorAll('tr');
-  rows.forEach(row => {
-    const jenis = row.cells[2].textContent.toLowerCase();
-    const status = row.cells[6].textContent;
-    const matchJenis = !jenisFilter || jenis.includes(jenisFilter);
-    const matchStatus = !statusFilter || status === statusFilter;
-    row.style.display = (matchJenis && matchStatus) ? '' : 'none';
-  });
+// Export JSON
+function exportJSON() {
+  const data = localStorage.getItem('airdropData') || '[]';
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'airdrop-data.json';
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
-function resetFilter() {
-  document.getElementById('searchJenis').value = '';
-  document.getElementById('filterStatus').value = '';
-  const rows = tableBody.querySelectorAll('tr');
-  rows.forEach(row => row.style.display = '');
+// Export Excel (pakai SheetJS)
+function exportExcel() {
+  const data = JSON.parse(localStorage.getItem('airdropData')) || [];
+  const worksheet = XLSX.utils.json_to_sheet(data);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Airdrop");
+  XLSX.writeFile(workbook, "airdrop-data.xlsx");
 }
