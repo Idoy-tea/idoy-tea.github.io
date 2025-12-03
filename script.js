@@ -6,17 +6,15 @@ const modalContent = document.getElementById('modalContent');
 const statusOptions = ["Pending", "Claimed", "Expired"];
 let editingRow = null;
 
-// Load data dari localStorage saat halaman dibuka
+// Load data dari localStorage
 window.onload = function() {
   const savedData = JSON.parse(localStorage.getItem('airdropData')) || [];
   savedData.forEach(item => addRow(item));
 };
 
-// Submit form
 form.addEventListener('submit', function(e) {
   e.preventDefault();
 
-  // Ambil semua checkbox properti
   const checkboxes = document.querySelectorAll('#properti input[type="checkbox"]');
   const selectedProps = [];
   checkboxes.forEach(cb => {
@@ -44,7 +42,6 @@ form.addEventListener('submit', function(e) {
   closeModal();
 });
 
-// Tambah baris ke tabel
 function addRow(data) {
   const row = document.createElement('tr');
   row.className = "hover:bg-gray-100 dark:hover:bg-gray-700";
@@ -62,20 +59,17 @@ function addRow(data) {
     </td>
   `;
 
-  // Hapus baris
   row.querySelector('.delete-btn').addEventListener('click', function() {
     row.remove();
     saveData();
   });
 
-  // Edit baris
   row.querySelector('.edit-btn').addEventListener('click', function() {
     document.getElementById('nama').value = data.nama;
     document.getElementById('tanggal').value = data.tanggal;
     document.getElementById('jenis').value = data.jenis;
     document.getElementById('link').value = data.link;
 
-    // Reset semua checkbox dulu
     const checkboxes = document.querySelectorAll('#properti input[type="checkbox"]');
     checkboxes.forEach(cb => {
       cb.checked = data.properti.includes(cb.value);
@@ -88,15 +82,14 @@ function addRow(data) {
     openModal();
   });
 
-  // Toggle status dengan klik
   const statusCell = row.querySelector('.status-cell');
-  statusCell.addEventListener('click', function() {
-    let current = statusCell.textContent;
-    let idx = statusOptions.indexOf(current);
-    let next = statusOptions[(idx + 1) % statusOptions.length];
-    statusCell.textContent = next;
-    saveData();
-  });
+    statusCell.addEventListener('click', function() {
+      let current = statusCell.textContent;
+      let idx = statusOptions.indexOf(current);
+      let next = statusOptions[(idx + 1) % statusOptions.length];
+      statusCell.textContent = next;
+      saveData();
+    });
 
   tableBody.appendChild(row);
 }
@@ -156,4 +149,23 @@ function exportExcel() {
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, "Airdrop");
   XLSX.writeFile(workbook, "airdrop-data.xlsx");
+}
+
+// Import JSON
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      localStorage.setItem('airdropData', JSON.stringify(parsed));
+      // render ulang tabel
+      tableBody.innerHTML = '';
+      parsed.forEach(item => addRow(item));
+    } catch (err) {
+      alert('File tidak valid.');
+    }
+  };
+  reader.readAsText(file);
 }
